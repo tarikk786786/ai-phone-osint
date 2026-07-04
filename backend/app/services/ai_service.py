@@ -1,4 +1,4 @@
-"""AI investigation service — generates intelligence reports using multiple LLMs."""
+"""AI investigation service - generates intelligence reports using multiple LLMs."""
 
 from __future__ import annotations
 
@@ -26,8 +26,11 @@ class AIInvestigationReport:
         self.model_used: str = "unknown"
         self.disclaimer: str = (
             "This report is AI-generated and based on publicly available information. "
-            "All location data is estimated from public telecom databases and should not "
-            "be considered real-time GPS tracking. Verify all findings through official channels."
+            "All location data is estimated from public telecom databases, cell tower data, "
+            "IP geolocation, WiFi BSSID lookups, and carrier region analysis. "
+            "Data sources include OpenCellID, Nominatim, OpenCage, Mozilla Location Service, "
+            "ip-api.com, ipwho.is, ipinfo.io, and multiple public OSINT databases. "
+            "Verify all findings through official channels."
         )
 
     def to_dict(self) -> dict:
@@ -86,21 +89,9 @@ class AIService:
         geo_data: Optional[dict[str, Any]] = None,
         preferred_provider: str = "auto",
     ) -> AIInvestigationReport:
-        """
-        Generate an AI investigation report using available LLM providers.
-
-        Args:
-            phone_data: Output from PhoneValidator
-            osint_data: Output from OSINTService
-            geo_data: Optional output from GeolocationService
-            preferred_provider: Specific provider or "auto" to try in order
-
-        Returns:
-            AIInvestigationReport with structured findings
-        """
+        """Generate an AI investigation report using available LLM providers."""
         prompt = self._build_investigation_prompt(phone_data, osint_data, geo_data)
 
-        # Try providers in order
         provider_order = ["openai", "gemini", "deepseek", "qwen", "ollama"]
         if preferred_provider != "auto" and preferred_provider in self.providers:
             provider_order.insert(0, preferred_provider)
@@ -115,7 +106,6 @@ class AIService:
                 except Exception:
                     continue
 
-        # Fallback: generate a basic report without AI
         return self._generate_fallback_report(phone_data, osint_data, geo_data)
 
     def _build_investigation_prompt(
@@ -130,10 +120,10 @@ class AIService:
 Analyze the following phone number intelligence data and generate a structured investigation report.
 
 **CRITICAL RULES:**
-1. Never claim to determine someone's real-time GPS location from a phone number.
+1. Use all available data sources: phone validation, carrier lookup, cell tower geolocation, IMEI device info, IP geolocation, WiFi BSSID, area code mapping, and multi-source aggregation.
 2. Clearly label all data as: Verified Data, Estimated Data, Public Data, or AI Inference.
-3. Any location information is from public telecom databases (area code, carrier region) only.
-4. Include a disclaimer about the limitations of phone number intelligence.
+3. Include location information from all available sources (area code, carrier region, cell tower, IP, WiFi).
+4. Provide actionable intelligence based on all gathered data.
 
 ## Phone Validation Data
 ```json
@@ -148,14 +138,15 @@ Analyze the following phone number intelligence data and generate a structured i
 {f"## Geolocation Data\n```json\n{json.dumps(geo_data, indent=2)}\n```" if geo_data else ""}
 
 Generate a response with these sections:
-1. **Executive Summary** — Brief overview of findings
-2. **Phone Analysis** — Validate number, detect country, region, carrier, line type
-3. **Carrier Analysis** — Carrier details, line type, porting status
-4. **Geolocation Analysis** — Estimated location (from area code, carrier region — NOT GPS)
-5. **OSINT Findings** — Public information gathered
-6. **Risk Assessment** — Spam score, fraud indicators, confidence level
-7. **Evidence Timeline** — Chronological order of findings
-8. **Recommendations** — Next steps for investigation
+1. **Executive Summary** - Brief overview of all findings
+2. **Phone Analysis** - Validate number, detect country, region, carrier, line type
+3. **Carrier Analysis** - Carrier details, line type, porting status
+4. **Location Intelligence** - Aggregate location from all sources (area code, carrier, cell tower, IP, WiFi)
+5. **OSINT Findings** - Public information gathered from 15+ sources
+6. **Risk Assessment** - Spam score, fraud indicators, confidence level
+7. **Device Intelligence** - IMEI data, device make/model if available
+8. **Evidence Timeline** - Chronological order of findings
+9. **Recommendations** - Next steps for investigation
 
 Format as JSON with keys: summary, phone_analysis (object), carrier_analysis (str), geolocation_analysis (str), osint_findings (str), risk_assessment (object with score, level, factors), timeline (array of objects with date, event, source), recommendations (array of strings), data_quality_notes (array of strings), confidence_level (str)."""
 
@@ -219,9 +210,7 @@ Format as JSON with keys: summary, phone_analysis (object), carrier_analysis (st
         report = AIInvestigationReport()
         report.model_used = model
 
-        # Try to extract JSON from the response
         try:
-            # Find JSON in the response (in case it has markdown wrapping)
             import re
             json_match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", content, re.DOTALL)
             if json_match:
@@ -241,7 +230,6 @@ Format as JSON with keys: summary, phone_analysis (object), carrier_analysis (st
             report.confidence_level = data.get("confidence_level", "medium")
 
         except (json.JSONDecodeError, AttributeError):
-            # Fallback: store raw content as summary
             report.summary = content
 
         return report
@@ -285,8 +273,8 @@ Format as JSON with keys: summary, phone_analysis (object), carrier_analysis (st
             "Cross-reference with additional public sources",
         ]
         report.data_quality_notes = [
-            "All location data is estimated from area codes and public telecom databases",
-            "No real-time GPS tracking data is used or available",
+            "All location data is estimated from area codes, cell towers, IP geolocation, and public telecom databases",
+            "Location sources include OpenCellID, Nominatim, OpenCage, Mozilla LS, ip-api.com, ipwho.is, ipinfo.io",
             "Carrier information may be affected by number portability",
         ]
 
