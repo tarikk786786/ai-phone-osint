@@ -478,7 +478,7 @@ export default function DashboardPage() {
                     </div>
                   </ToolResultCard>
 
-                  {(result.data.spam_score !== null || result.osint) && (
+                  {(result.data.spam_score !== null || (result as LookupResult).osint) && (
                     <ToolResultCard title="Risk Assessment" icon={Shield}>
                       <RiskMeter score={result.data.spam_score as number} />
                     </ToolResultCard>

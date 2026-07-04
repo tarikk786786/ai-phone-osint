@@ -3,8 +3,9 @@ services:
   - type: web
     name: phone-osint-api
     env: python
+    rootDir: backend
     plan: free
-    buildCommand: pip install -r backend/requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: ENVIRONMENT

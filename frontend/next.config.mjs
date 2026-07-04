@@ -1,9 +1,17 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: "standalone",
   images: {
-    domains: ["localhost", "*.vercel.app"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.vercel.app",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+      }
+    ],
   },
   async rewrites() {
     return [
