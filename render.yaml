@@ -2,7 +2,7 @@ services:
   # Backend API (FastAPI)
   - type: web
     name: phone-osint-api
-    env: python
+    runtime: python
     rootDir: backend
     plan: free
     buildCommand: pip install -r requirements.txt
@@ -26,7 +26,7 @@ services:
   # Frontend (Next.js)
   - type: web
     name: phone-osint-frontend
-    env: node
+    runtime: node
     rootDir: frontend
     plan: free
     buildCommand: npm install && npm run build
