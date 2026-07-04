@@ -18,6 +18,17 @@ import {
   Lock,
   Database,
   Activity,
+  Signal,
+  Fingerprint,
+  Wifi,
+  Hash,
+  Layers,
+  Radar,
+  Target,
+  Smartphone,
+  Crosshair,
+  Zap,
+  ShieldAlert,
 } from "lucide-react";
 
 // ── Components ─────────────────────────────────────────
@@ -39,6 +50,9 @@ function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-sm text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors">
               Features
+            </a>
+            <a href="#tools" className="text-sm text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors">
+              Location Tools
             </a>
             <a href="#how-it-works" className="text-sm text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors">
               How it works
@@ -86,8 +100,9 @@ function HeroSection() {
           </h1>
 
           <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Validate phone numbers, detect carriers, estimate geolocation, and
-            generate AI investigation reports — all from publicly available data.
+            Validate phone numbers, detect carriers, locate devices via cell towers,
+            IMEI, WiFi, IP geolocation, and generate AI investigation reports — all from
+            publicly available data using 10+ OSINT tools.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -99,7 +114,9 @@ function HeroSection() {
               Try Phone Lookup
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/tarikk786786/ai-phone-osint"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-lg font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
             >
               <Github className="w-5 h-5" />
@@ -127,14 +144,14 @@ const features = [
   },
   {
     icon: MapPin,
-    title: "Geolocation Estimate",
-    description: "Estimated location from area codes and public telecom databases (NOT GPS).",
+    title: "Multi-Source Geolocation",
+    description: "Aggregate location from 10+ sources: OpenCellID, Nominatim, OpenCage, Mozilla LS, and more.",
     color: "from-emerald-500 to-emerald-600",
   },
   {
     icon: Shield,
     title: "Spam & Risk Analysis",
-    description: "Check public spam databases and assign a risk score to suspicious numbers.",
+    description: "Check 8+ spam databases and assign risk scores using community-sourced data.",
     color: "from-red-500 to-red-600",
   },
   {
@@ -196,17 +213,146 @@ function FeaturesSection() {
   );
 }
 
+const locationTools = [
+  {
+    icon: Layers,
+    title: "Multi-Source Aggregation",
+    description: "Combine 10+ geolocation sources for the best accuracy: OpenCellID, Nominatim, OpenCage, Mozilla LS, ip-api, Google Maps, carrier regions.",
+    sources: "10+ sources",
+    accuracy: "Best available",
+    color: "from-purple-500 to-purple-600",
+  },
+  {
+    icon: Signal,
+    title: "Cell Tower Geolocation",
+    description: "Locate devices using MCC/MNC/LAC/CID cell tower data via OpenCellID and Mozilla Location Service databases.",
+    sources: "OpenCellID, Mozilla LS",
+    accuracy: "100m - 5km",
+    color: "from-green-500 to-green-600",
+  },
+  {
+    icon: Fingerprint,
+    title: "IMEI Device Lookup",
+    description: "Identify device make, model, brand, and manufacturer from IMEI number. Check blacklist and stolen status.",
+    sources: "IMEI Database APIs",
+    accuracy: "Device-level",
+    color: "from-orange-500 to-orange-600",
+  },
+  {
+    icon: Globe,
+    title: "IP Geolocation",
+    description: "Geolocate any IP address using 3 free APIs: ip-api.com, ipwho.is, ipinfo.io. Detect proxy/VPN status.",
+    sources: "ip-api, ipwho.is, ipinfo",
+    accuracy: "City-level",
+    color: "from-cyan-500 to-cyan-600",
+  },
+  {
+    icon: Wifi,
+    title: "WiFi BSSID Geolocation",
+    description: "Locate devices via WiFi access point MAC addresses using Mozilla Location Service WiFi API.",
+    sources: "Mozilla Location Service",
+    accuracy: "10m - 100m",
+    color: "from-pink-500 to-pink-600",
+  },
+  {
+    icon: Hash,
+    title: "Area Code Mapping",
+    description: "Estimate location from phone area codes using built-in database covering US, UK, India, and more.",
+    sources: "Built-in DB + Nominatim",
+    accuracy: "City-level",
+    color: "from-teal-500 to-teal-600",
+  },
+  {
+    icon: Radar,
+    title: "OSINT Phone Scan",
+    description: "Scan 8+ spam databases and check 10 social platforms for phone number intelligence.",
+    sources: "15+ public sources",
+    accuracy: "Community-sourced",
+    color: "from-red-500 to-red-600",
+  },
+  {
+    icon: Crosshair,
+    title: "Reverse Geocoding",
+    description: "Convert GPS coordinates to human-readable addresses using Nominatim (OpenStreetMap).",
+    sources: "Nominatim/OSM",
+    accuracy: "Address-level",
+    color: "from-indigo-500 to-indigo-600",
+  },
+  {
+    icon: ShieldAlert,
+    title: "Spam & Fraud Detection",
+    description: "Check 8+ spam databases including spamcalls.net, truecaller.com, tellows.com, and more.",
+    sources: "8+ spam databases",
+    accuracy: "Community-sourced",
+    color: "from-rose-500 to-rose-600",
+  },
+];
+
+function LocationToolsSection() {
+  return (
+    <section id="tools" className="py-20 px-4 bg-white/50 dark:bg-slate-900/50">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full text-sm text-green-600 dark:text-green-400 mb-6">
+            <MapPin className="w-4 h-4" />
+            <span>11 Location Finder Tools</span>
+          </div>
+          <h2 className="text-4xl font-bold mb-4">
+            All Mobile Location Finder Tools
+          </h2>
+          <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">
+            Integrated from the best open-source OSINT tools on GitHub.
+            Cell tower triangulation, IMEI lookup, WiFi geolocation, IP tracking, and more.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {locationTools.map((tool, i) => (
+            <motion.div
+              key={tool.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="group relative p-6 bg-white dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:border-primary/30 transition-all duration-300"
+            >
+              <div
+                className={`w-12 h-12 rounded-lg bg-gradient-to-br ${tool.color} flex items-center justify-center mb-4 text-white`}
+              >
+                <tool.icon className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">{tool.title}</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                {tool.description}
+              </p>
+              <div className="flex items-center gap-3 text-xs text-slate-500">
+                <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded">{tool.sources}</span>
+                <span className="px-2 py-0.5 bg-primary/10 text-primary rounded">{tool.accuracy}</span>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HowItWorksSection() {
   const steps = [
     {
       icon: Search,
-      title: "Enter a Phone Number",
-      description: "Input any phone number in international or local format.",
+      title: "Enter Data",
+      description: "Input a phone number, IMEI, IP address, cell tower info, or WiFi BSSID.",
     },
     {
       icon: Database,
-      title: "Intelligence Gathering",
-      description: "Automated validation, carrier lookup, OSINT checks, and geolocation estimation.",
+      title: "Multi-Source Lookup",
+      description: "Automated queries to 10+ public databases in parallel for best accuracy.",
     },
     {
       icon: Brain,
@@ -216,12 +362,12 @@ function HowItWorksSection() {
     {
       icon: FileText,
       title: "Export & Share",
-      description: "Export results as PDF, CSV, or JSON. Share via API.",
+      description: "Export results as PDF, CSV, or JSON. Full REST API available.",
     },
   ];
 
   return (
-    <section id="how-it-works" className="py-20 px-4 bg-white/50 dark:bg-slate-900/50">
+    <section id="how-it-works" className="py-20 px-4">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -273,9 +419,9 @@ function StatsSection() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
             { icon: Phone, value: "200+", label: "Countries Supported" },
-            { icon: Shield, value: "99.9%", label: "Validation Accuracy" },
+            { icon: MapPin, value: "10+", label: "Location Sources" },
             { icon: Users, value: "Open Source", label: "Community Driven" },
-            { icon: Activity, value: "Real-time", label: "Analysis" },
+            { icon: Zap, value: "Real-time", label: "Analysis" },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -310,8 +456,9 @@ function DisclaimerSection() {
               <p className="text-sm text-amber-700 dark:text-amber-400 leading-relaxed">
                 This tool uses only publicly available information and public telecom datasets.
                 It does NOT determine real-time GPS locations. All geolocation data is estimated
-                from area codes and carrier regions. Use only for lawful purposes such as
-                security research, fraud prevention, and publicly available intelligence gathering.
+                from area codes, carrier regions, cell tower databases, and public IP geolocation APIs.
+                Use only for lawful purposes such as security research, fraud prevention, and
+                publicly available intelligence gathering.
               </p>
             </div>
           </div>
@@ -332,15 +479,15 @@ function Footer() {
               <span className="font-bold">PhoneOSINT</span>
             </div>
             <p className="text-sm text-slate-500">
-              AI-powered phone number intelligence platform for OSINT research.
+              AI-powered phone number intelligence platform with 11 location finder tools.
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-3">Product</h4>
             <div className="space-y-2 text-sm text-slate-500">
               <a href="#features" className="block hover:text-primary transition-colors">Features</a>
-              <a href="#" className="block hover:text-primary transition-colors">API</a>
-              <a href="#" className="block hover:text-primary transition-colors">Documentation</a>
+              <a href="#tools" className="block hover:text-primary transition-colors">Location Tools</a>
+              <a href="/dashboard" className="block hover:text-primary transition-colors">Dashboard</a>
             </div>
           </div>
           <div>
@@ -354,7 +501,7 @@ function Footer() {
           <div>
             <h4 className="font-semibold mb-3">Community</h4>
             <div className="space-y-2 text-sm text-slate-500">
-              <a href="https://github.com" className="flex items-center gap-1 hover:text-primary transition-colors">
+              <a href="https://github.com/tarikk786786/ai-phone-osint" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 hover:text-primary transition-colors">
                 <Github className="w-4 h-4" /> GitHub
               </a>
               <a href="#" className="block hover:text-primary transition-colors">Report Issue</a>
@@ -378,6 +525,7 @@ export default function HomePage() {
       <HeroSection />
       <StatsSection />
       <FeaturesSection />
+      <LocationToolsSection />
       <HowItWorksSection />
       <DisclaimerSection />
       <Footer />

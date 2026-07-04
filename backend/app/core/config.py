@@ -15,9 +15,9 @@ class Environment(str, Enum):
 
 
 class Settings:
-    """App settings — loaded from env vars with sensible defaults."">
+    """App settings - loaded from env vars with sensible defaults."""
 
-    # ── App ──────────────────────────────────────────────
+    # App
     APP_NAME: str = "AI Phone Intelligence OSINT Platform"
     APP_VERSION: str = "1.0.0"
     ENVIRONMENT: Environment = Environment(os.getenv("ENVIRONMENT", "development"))
@@ -26,7 +26,7 @@ class Settings:
     ALLOWED_HOSTS: list[str] = os.getenv("ALLOWED_HOSTS", "*").split(",")
     CORS_ORIGINS: list[str] = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:8000").split(",")
 
-    # ── Database ─────────────────────────────────────────
+    # Database
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
         "postgresql+asyncpg://postgres:postgres@localhost:5432/phone_osint",
@@ -34,13 +34,12 @@ class Settings:
     MONGO_URI: str = os.getenv("MONGO_URI", "mongodb://localhost:27017/phone_osint")
     REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
-    # ── Auth / API Keys ──────────────────────────────────
+    # Auth / API Keys
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
     REFRESH_TOKEN_EXPIRE_DAYS: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
     API_KEY_LENGTH: int = 32
 
-    # ── External APIs ────────────────────────────────────
-    # Phone validation / carrier
+    # External APIs - Phone validation / carrier
     NUMVERIFY_API_KEY: Optional[str] = os.getenv("NUMVERIFY_API_KEY")
     ABSTRACT_API_KEY: Optional[str] = os.getenv("ABSTRACT_API_KEY")
     IPQUALITYSCORE_API_KEY: Optional[str] = os.getenv("IPQUALITYSCORE_API_KEY")
@@ -50,6 +49,14 @@ class Settings:
     # Geolocation
     OPENCELLID_API_KEY: Optional[str] = os.getenv("OPENCELLID_API_KEY")
     OPENCAGE_API_KEY: Optional[str] = os.getenv("OPENCAGE_API_KEY")
+    GOOGLE_MAPS_API_KEY: Optional[str] = os.getenv("GOOGLE_MAPS_API_KEY")
+    WIGLE_API_KEY: Optional[str] = os.getenv("WIGLE_API_KEY")
+    WIGLE_API_SECRET: Optional[str] = os.getenv("WIGLE_API_SECRET")
+    MAXMIND_LICENSE_KEY: Optional[str] = os.getenv("MAXMIND_LICENSE_KEY")
+    IPINFO_TOKEN: Optional[str] = os.getenv("IPINFO_TOKEN")
+
+    # IMEI / Device
+    IMEI_API_KEY: Optional[str] = os.getenv("IMEI_API_KEY")
 
     # AI providers
     OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
@@ -58,18 +65,18 @@ class Settings:
     QWEN_API_KEY: Optional[str] = os.getenv("QWEN_API_KEY")
     OLLAMA_BASE_URL: str = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
-    # ── Rate Limiting ────────────────────────────────────
+    # Rate Limiting
     RATE_LIMIT_PER_MINUTE: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "60"))
     RATE_LIMIT_PER_HOUR: int = int(os.getenv("RATE_LIMIT_PER_HOUR", "1000"))
 
-    # ── Storage ──────────────────────────────────────────
+    # Storage
     UPLOAD_DIR: Path = Path(os.getenv("UPLOAD_DIR", "./data/uploads"))
     EXPORT_DIR: Path = Path(os.getenv("EXPORT_DIR", "./data/exports"))
 
-    # ── Logging ──────────────────────────────────────────
+    # Logging
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
-    # ── Cell Tower DB (OpenCellID local) ─────────────────
+    # Cell Tower DB (OpenCellID local)
     CELL_TOWER_DB_PATH: str = os.getenv("CELL_TOWER_DB_PATH", "./data/cell_towers.db")
 
 
