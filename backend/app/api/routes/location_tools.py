@@ -69,16 +69,14 @@ def detect_input_type(value: str) -> tuple[str, str]:
     if ipv4_match:
         octets = [int(o) for o in ipv4_match.groups()]
         if all(0 <= o <= 255 for o in octets):
-            return "ip", value
-    
-    # IPv6 check
-    if ':' in value and re.match(r'^[0-9a-fA-F:]+$', value):
-        return "ip", value
-    
-    # Check for WiFi BSSID (MAC address format)
+            return "ip", value    # Check for WiFi BSSID (MAC address format) — before IPv6 since MACs also contain colons
     bssid_match = re.match(r'^([0-9A-Fa-f]{2}[:\-]){5}[0-9A-Fa-f]{2}$', value)
     if bssid_match:
         return "wifi_bssid", value.upper()
+
+    # IPv6 check
+    if ':' in value and re.match(r'^[0-9a-fA-F:]+$', value):
+        return "ip", value
     
     # Check for IMEI (15 digits, possibly with dashes)
     digits_only = value.replace('-', '').replace(' ', '')
