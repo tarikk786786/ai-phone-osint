@@ -454,11 +454,13 @@ function DisclaimerSection() {
                 Ethical & Legal Use Only
               </h3>
               <p className="text-sm text-amber-700 dark:text-amber-400 leading-relaxed">
-                This tool uses only publicly available information and public telecom datasets.
-                It does NOT determine real-time GPS locations. All geolocation data is estimated
-                from area codes, carrier regions, cell tower databases, and public IP geolocation APIs.
-                Use only for lawful purposes such as security research, fraud prevention, and
-                publicly available intelligence gathering.
+                This tool uses publicly available information and public telecom datasets to provide
+                comprehensive phone intelligence. It aggregates data from 10+ location sources including
+                cell tower databases (OpenCellID), WiFi BSSID geolocation, IP geolocation (ip-api, ipwho.is),
+                area code mapping, carrier region analysis, IMEI device lookup, and multi-source aggregation.
+                All geolocation data is estimated from public sources and should be verified through official
+                channels. Use responsibly for lawful purposes such as security research, fraud prevention,
+                and publicly available intelligence gathering.
               </p>
             </div>
           </div>
