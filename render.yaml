@@ -1,0 +1,42 @@
+services:
+  # Backend API
+  - type: web
+    name: phone-osint-api
+    env: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: phone-osint-db
+          property: connectionString
+      - key: CORS_ORIGINS
+        value: https://phone-osint.vercel.app
+      - key: LOG_LEVEL
+        value: INFO
+
+  # Frontend
+  - type: web
+    name: phone-osint-frontend
+    env: node
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://phone-osint-api.onrender.com
+
+databases:
+  - name: phone-osint-db
+    plan: free
+    databaseType: postgres
+    ipAllowList: []

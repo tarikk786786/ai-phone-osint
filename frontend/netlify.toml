@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+  base = "frontend"
+
+[build.environment]
+  NEXT_PUBLIC_API_URL = "https://phone-osint-api.onrender.com"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
