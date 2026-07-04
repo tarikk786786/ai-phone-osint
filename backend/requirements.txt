@@ -40,7 +40,7 @@ slowapi==0.1.9
 loguru==0.7.2
 
 # ── IMEI / Device Intelligence ──────────────────────────
-stdnum==1.20
+python-stdnum==1.20
 
 # ── Dev ────────────────────────────────────────────────
 pytest==8.3.4
