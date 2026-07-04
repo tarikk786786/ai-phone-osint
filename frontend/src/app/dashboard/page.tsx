@@ -488,8 +488,8 @@ export default function DashboardPage() {
                     <ToolResultCard title="Estimated Location" icon={MapPin}>
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <div className="flex justify-between text-sm"><span className="text-slate-500">Latitude</span><span className="font-mono">{(result as LookupResult).geolocation?.latitude}</span></div>
-                          <div className="flex justify-between text-sm"><span className="text-slate-500">Longitude</span><span className="font-mono">{(result as LookupResult).geolocation?.longitude}</span></div>
+                          <div className="flex justify-between text-sm"><span className="text-slate-500">Latitude</span><span className="font-mono">{(result as LookupResult).geolocation?.latitude as string}</span></div>
+                          <div className="flex justify-between text-sm"><span className="text-slate-500">Longitude</span><span className="font-mono">{(result as LookupResult).geolocation?.longitude as string}</span></div>
                           <div className="flex justify-between text-sm"><span className="text-slate-500">Confidence</span><span className="capitalize font-medium">{(result as LookupResult).geolocation?.confidence as string}</span></div>
                           <div className="flex justify-between text-sm"><span className="text-slate-500">Source</span><span>{(result as LookupResult).geolocation?.source as string}</span></div>
                           {(result as LookupResult).geolocation?.address && (
