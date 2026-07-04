@@ -245,8 +245,10 @@ class WiFiGeolocationService:
 
     def get_carrier_info(self, mcc: int, mnc: int) -> Optional[dict[str, str]]:
         """Look up carrier information from MCC/MNC code."""
-        key = f"{mcc}{mnc}"
-        return self.CARRIER_DB.get(key)
+        # Try both zero-padded and raw formats
+        key_padded = f"{mcc:03d}{mnc:03d}"
+        key_raw = f"{mcc}{mnc}"
+        return self.CARRIER_DB.get(key_padded) or self.CARRIER_DB.get(key_raw)
 
 
 wifi_geolocation_service = WiFiGeolocationService()

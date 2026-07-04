@@ -418,8 +418,7 @@ class GeolocationService:
         if not tasks:
             return GeoLocation()
 
-        coros = [t[1] for t in tasks]
-        results = await asyncio.gather(*coros, return_exceptions=True)
+        results = await asyncio.gather(*[t[1] for t in tasks], return_exceptions=True)
 
         # Collect valid results (filter exceptions and None results)
         for i, (name, _) in enumerate(tasks):
